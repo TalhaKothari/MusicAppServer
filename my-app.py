@@ -42,14 +42,14 @@ def get_artist_by_id(id):
 @app.route('/music', methods=['POST'])
 def create_artist():
   print('inside create_artist')
-  rows = session.execute("INSERT INTO music.artist (id, name, album) VALUES (%s, %s, %s)", (uuid.uuid1(), request.form['name'], request.form['album']))
+  rows = session.execute("INSERT INTO music.artist (id, name, album) VALUES (%s, %s, %s)", (uuid.uuid1(), request.json['name'], request.json['album']))
   return jsonify({'message':'new record created'}), 201
 
 
 @app.route('/music/<string:id>', methods = ['PUT'])
 def update_artist(id):
   print('inside update_artist')
-  rows = session.execute("""UPDATE music.artist SET name=%(name)s, album=%(album)s WHERE id=%(id)s""", {'name': request.form['name'], 'album': request.form['album'], 'id': uuid.UUID(id)})
+  rows = session.execute("""UPDATE music.artist SET name=%(name)s, album=%(album)s WHERE id=%(id)s""", {'name': request.json['name'], 'album': request.json['album'], 'id': uuid.UUID(id)})
   print(rows,file=sys.stderr)
 
   return jsonify({'message':'updated successfully'}), 200
